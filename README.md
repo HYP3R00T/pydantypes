@@ -33,3 +33,10 @@ print(data)
 - Google Cloud Types: Custom datatypes for various Google Cloud services like GCS, Compute Engine, Cloud Functions, etc.
 - Other Types: Frequently used types that are not native but commonly appear in engineering.
 
+## Resources
+
+- https://docs.pydantic.dev/latest/concepts/types/#strict-types
+- https://docs.pydantic.dev/latest/api/types/#pydantic.types.NegativeInt
+- https://github.com/pydantic/pydantic-extra-types/blob/main/.github/workflows/ci.yml
+- https://github.com/pydantic/pydantic/blob/d654a0766c2f3c6fe0a12718f32aa3bf4d3ecc86/pydantic/types.py#L35
+- https://github.com/annotated-types/annotated-types
