@@ -40,3 +40,46 @@ print(data)
 - https://github.com/pydantic/pydantic-extra-types/blob/main/.github/workflows/ci.yml
 - https://github.com/pydantic/pydantic/blob/d654a0766c2f3c6fe0a12718f32aa3bf4d3ecc86/pydantic/types.py#L35
 - https://github.com/annotated-types/annotated-types
+
+
+## TODO
+
+Suggested Types for pydantypes
+
+AWS Types
+S3.Uri: URI for S3 objects.
+EC2.InstanceId: EC2 instance identifier.
+Lambda.FunctionName: Lambda function name.
+DynamoDB.TableName: DynamoDB table name.
+SNS.TopicArn: SNS topic ARN.
+SQS.QueueUrl: SQS queue URL.
+IAM.RoleName: IAM role name.
+RDS.DBInstanceIdentifier: RDS instance identifier.
+Azure Types
+BlobStorage.Uri: URI for Azure Blob Storage.
+VM.ResourceId: Virtual Machine resource identifier.
+FunctionApp.Name: Azure Function App name.
+CosmosDB.AccountName: Cosmos DB account name.
+ServiceBus.QueueName: Service Bus queue name.
+AppService.Name: App Service name.
+KeyVault.Uri: URI for Azure Key Vault.
+SQLServer.ServerName: Azure SQL Server name.
+Google Cloud Types
+GCS.Uri: URI for Google Cloud Storage objects.
+ComputeEngine.InstanceId: Compute Engine instance identifier.
+CloudFunction.Name: Cloud Function name.
+BigQuery.DatasetId: BigQuery dataset identifier.
+PubSub.TopicName: Pub/Sub topic name.
+Firestore.CollectionName: Firestore collection name.
+CloudRun.ServiceName: Cloud Run service name.
+CloudSQL.InstanceId: Cloud SQL instance identifier.
+Common Cloud Types
+Url: General URL datatype.
+Email: Email address datatype.
+UUID: Universal Unique Identifier.
+Timestamp: ISO 8601 timestamp.
+IPAddress: IP address datatype.
+Region: Cloud region name.
+ResourceName: General resource name.
+Tag: Key-value tag pair for resource tagging.
+Feel free to suggest more types or contribute to the project!
