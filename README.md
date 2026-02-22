@@ -1,85 +1,70 @@
 # pydantypes
 
-pydantypes is an extension to Pydantic that defines a collection of various datatypes relevant for cloud software engineering. It includes custom types for AWS, Azure, and Google Cloud services, as well as other commonly used non-native types.
+[![CI](https://github.com/oborchers/pydantypes/actions/workflows/ci.yml/badge.svg)](https://github.com/oborchers/pydantypes/actions/workflows/ci.yml)
+[![PyPI version](https://img.shields.io/pypi/v/pydantypes.svg)](https://pypi.org/project/pydantypes/)
+[![Python versions](https://img.shields.io/pypi/pyversions/pydantypes.svg)](https://pypi.org/project/pydantypes/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**The missing types for Pydantic** — cloud, DevOps, web, and data engineering.
+
+pydantypes provides validated, constrained Pydantic types for identifiers, ARNs, URIs, and resource names that appear everywhere in modern infrastructure code. Catch invalid values at parse time, not at deploy time.
 
 ## Installation
-
-To install pydantypes, use pip:
 
 ```bash
 pip install pydantypes
 ```
 
-## Usage
-
-Here is a simple example of how to use pydantypes:
-
+## Quick Example
 
 ```python
 from pydantic import BaseModel
-import pydantypes.aws.S3 as S3
+from pydantypes.cloud.aws import S3Uri, IamRoleArn
 
-class Data(BaseModel):
-    uri: S3.Uri
+class PipelineConfig(BaseModel):
+    source: S3Uri
+    execution_role: IamRoleArn
 
-data = Data(uri="s3://my-bucket/my-object")
-print(data)
+config = PipelineConfig(
+    source="s3://my-bucket/data/input.parquet",
+    execution_role="arn:aws:iam::123456789012:role/pipeline-role",
+)
+# Invalid values are rejected immediately:
+# PipelineConfig(source="not-an-s3-uri", ...)  -> ValidationError
 ```
 
-## Features
+## Domains
 
-- AWS Types: Custom datatypes for various AWS services like S3, EC2, Lambda, etc.
-- Azure Types: Custom datatypes for various Azure services like Blob Storage, VMs, Functions, etc.
-- Google Cloud Types: Custom datatypes for various Google Cloud services like GCS, Compute Engine, Cloud Functions, etc.
-- Other Types: Frequently used types that are not native but commonly appear in engineering.
+| Domain | Package | Examples |
+|--------|---------|----------|
+| **AWS** | `pydantypes.cloud.aws` | S3 URIs, IAM ARNs, Lambda function names, EC2 instance IDs |
+| **Azure** | `pydantypes.cloud.azure` | Blob Storage URIs, resource IDs, Key Vault names |
+| **GCP** | `pydantypes.cloud.gcp` | GCS URIs, project IDs, Cloud Run service names |
+| **DevOps** | `pydantypes.devops` | Docker image refs, semver strings, cron expressions |
+| **Web** | `pydantypes.web` | Endpoint paths, header names, MIME types |
+| **Data** | `pydantypes.data` | SQL identifiers, connection strings, column names |
 
-## Resources
+## Compatibility
 
-- https://docs.pydantic.dev/latest/concepts/types/#strict-types
-- https://docs.pydantic.dev/latest/api/types/#pydantic.types.NegativeInt
-- https://github.com/pydantic/pydantic-extra-types/blob/main/.github/workflows/ci.yml
-- https://github.com/pydantic/pydantic/blob/d654a0766c2f3c6fe0a12718f32aa3bf4d3ecc86/pydantic/types.py#L35
-- https://github.com/annotated-types/annotated-types
+pydantypes is designed as a complement to [pydantic-extra-types](https://github.com/pydantic/pydantic-extra-types). While pydantic-extra-types covers general-purpose types (colors, phone numbers, payment cards), pydantypes focuses on infrastructure and engineering identifiers.
 
+- Requires **Pydantic v2.5.2+**
+- Supports **Python 3.10–3.13**
 
-## TODO
+## Development
 
-Suggested Types for pydantypes
+```bash
+# Clone and set up
+git clone https://github.com/oborchers/pydantypes.git
+cd pydantypes
+make init
 
-AWS Types
-S3.Uri: URI for S3 objects.
-EC2.InstanceId: EC2 instance identifier.
-Lambda.FunctionName: Lambda function name.
-DynamoDB.TableName: DynamoDB table name.
-SNS.TopicArn: SNS topic ARN.
-SQS.QueueUrl: SQS queue URL.
-IAM.RoleName: IAM role name.
-RDS.DBInstanceIdentifier: RDS instance identifier.
-Azure Types
-BlobStorage.Uri: URI for Azure Blob Storage.
-VM.ResourceId: Virtual Machine resource identifier.
-FunctionApp.Name: Azure Function App name.
-CosmosDB.AccountName: Cosmos DB account name.
-ServiceBus.QueueName: Service Bus queue name.
-AppService.Name: App Service name.
-KeyVault.Uri: URI for Azure Key Vault.
-SQLServer.ServerName: Azure SQL Server name.
-Google Cloud Types
-GCS.Uri: URI for Google Cloud Storage objects.
-ComputeEngine.InstanceId: Compute Engine instance identifier.
-CloudFunction.Name: Cloud Function name.
-BigQuery.DatasetId: BigQuery dataset identifier.
-PubSub.TopicName: Pub/Sub topic name.
-Firestore.CollectionName: Firestore collection name.
-CloudRun.ServiceName: Cloud Run service name.
-CloudSQL.InstanceId: Cloud SQL instance identifier.
-Common Cloud Types
-Url: General URL datatype.
-Email: Email address datatype.
-UUID: Universal Unique Identifier.
-Timestamp: ISO 8601 timestamp.
-IPAddress: IP address datatype.
-Region: Cloud region name.
-ResourceName: General resource name.
-Tag: Key-value tag pair for resource tagging.
-Feel free to suggest more types or contribute to the project!
+# Run checks
+make check        # lint + typecheck + test
+make format       # auto-format code
+make test-cov     # tests with coverage report
+```
+
+## License
+
+MIT
