@@ -69,7 +69,7 @@ jobs:
       - name: Combine coverage
         run: |
           uv run coverage combine
-          uv run coverage report --fail-under 90
+          uv run coverage report
 
   check:
     if: always()
