@@ -8,7 +8,7 @@ def test_version() -> None:
 
 
 def test_subpackages_importable() -> None:
-    from pydantypes import data, devops, web  # noqa: F401
+    from pydantypes import ai, data, devops, web  # noqa: F401
     from pydantypes.cloud import aws, azure, gcp  # noqa: F401
 
 
@@ -85,3 +85,7 @@ def test_all_web_types_importable() -> None:
 
 def test_all_data_types_importable() -> None:
     from pydantypes.data import TableIdentifier  # noqa: F401
+
+
+def test_all_ai_types_importable() -> None:
+    from pydantypes.ai import Label, LabelEnum  # noqa: F401

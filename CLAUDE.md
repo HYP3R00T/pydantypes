@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-pydantypes — The missing types for Pydantic. Validated, constrained types for cloud (AWS/Azure/GCP), DevOps, web, and data engineering identifiers.
+pydantypes — The missing types for Pydantic. Validated, constrained types for cloud (AWS/Azure/GCP), DevOps, web, data, and AI engineering identifiers.
 
 **Repo**: https://github.com/oborchers/pydantypes | **Python**: 3.10+ | **Pydantic**: v2.5.2+
 
@@ -78,6 +78,7 @@ src/pydantypes/
   devops/              # Docker refs, semver, cron, ...
   web/                 # Endpoints, headers, MIME types, ...
   data/                # SQL identifiers, connection strings, ...
+  ai/                  # LLM classification labels
 tests/                 # Mirrors src structure
 ```
 

@@ -5,9 +5,9 @@
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://docs.pydantic.dev)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-**The missing types for Pydantic** — cloud, DevOps, web, and data engineering.
+**The missing types for Pydantic** — cloud, DevOps, web, data, and AI engineering.
 
-pydantypes provides validated, constrained Pydantic types for identifiers, ARNs, URIs, and resource names that appear everywhere in modern infrastructure code. Catch invalid values at parse time, not at deploy time.
+pydantypes provides validated, constrained Pydantic types for identifiers, ARNs, URIs, resource names, and classification labels that appear everywhere in modern infrastructure and AI code. Catch invalid values at parse time, not at deploy time.
 
 ## Installation
 
@@ -33,6 +33,22 @@ config = PipelineConfig(
 # PipelineConfig(source="not-an-s3-uri", ...)  -> ValidationError
 ```
 
+```python
+from pydantic import BaseModel
+from pydantypes.ai import LabelEnum, Label
+
+class Sentiment(LabelEnum):
+    POSITIVE = Label("positive", description="Expresses approval or satisfaction")
+    NEGATIVE = Label("negative", description="Expresses disapproval or frustration")
+    AMBIGUOUS = Label("ambiguous", description="Mixed or unclear emotional signals")
+
+class ClassificationResult(BaseModel):
+    sentiment: Sentiment
+
+result = ClassificationResult(sentiment="positive")
+result.sentiment.description  # "Expresses approval or satisfaction"
+```
+
 ## Domains
 
 | Domain | Package | Examples |
@@ -43,6 +59,7 @@ config = PipelineConfig(
 | **DevOps** | `pydantypes.devops` | Docker image refs, semver strings, cron expressions |
 | **Web** | `pydantypes.web` | Endpoint paths, header names, MIME types |
 | **Data** | `pydantypes.data` | SQL identifiers, connection strings, column names |
+| **AI** | `pydantypes.ai` | Classification labels with lifecycle, deprecation, alias resolution |
 
 ## Compatibility
 
