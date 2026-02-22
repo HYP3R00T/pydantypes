@@ -1,0 +1,34 @@
+from __future__ import annotations
+
+import re
+from typing import Annotated
+
+from pydantic import AfterValidator, WithJsonSchema
+from pydantic_core import PydanticCustomError
+
+_HELM_CHART_NAME_PATTERN = re.compile(r"^[a-z0-9][-a-z0-9]*$")
+
+
+def _validate_helm_chart_name(v: str) -> str:
+    if not _HELM_CHART_NAME_PATTERN.match(v):
+        raise PydanticCustomError(
+            "helm_chart_name",
+            "Invalid Helm chart name: {value}",
+            {"value": v},
+        )
+    return v
+
+
+HelmChartName = Annotated[
+    str,
+    AfterValidator(_validate_helm_chart_name),
+    WithJsonSchema(
+        {
+            "type": "string",
+            "pattern": _HELM_CHART_NAME_PATTERN.pattern,
+            "description": "A valid Helm chart name.",
+            "examples": ["nginx", "cert-manager"],
+            "title": "HelmChartName",
+        }
+    ),
+]
