@@ -1,9 +1,9 @@
 # pydantypes
 
-[![CI](https://github.com/oborchers/pydantypes/actions/workflows/ci.yml/badge.svg)](https://github.com/oborchers/pydantypes/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/pypi/v/pydantypes.svg)](https://pypi.org/project/pydantypes/)
-[![Python versions](https://img.shields.io/pypi/pyversions/pydantypes.svg)](https://pypi.org/project/pydantypes/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://img.shields.io/github/actions/workflow/status/oborchers/pydantypes/ci.yml?branch=main&logo=github&label=CI)](https://github.com/oborchers/pydantypes/actions/workflows/ci.yml)
+[![license](https://img.shields.io/github/license/oborchers/pydantypes.svg)](https://github.com/oborchers/pydantypes/blob/main/LICENSE)
+[![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://docs.pydantic.dev)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 **The missing types for Pydantic** — cloud, DevOps, web, and data engineering.
 
