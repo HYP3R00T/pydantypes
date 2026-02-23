@@ -84,7 +84,7 @@ tests/                 # Mirrors src structure
 
 ## Python and Formatting
 
-**Ruff**: 100 chars, double quotes, 4-space indent, rules: E/F/UP/B/SIM/I/PLC
+**Ruff**: 100 chars, double quotes, 4-space indent, rules: E/F/UP/B/SIM/I/PLC/RUF/PT/N
 
 ### Modern Type Syntax (3.10+)
 
