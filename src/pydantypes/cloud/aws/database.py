@@ -9,10 +9,11 @@ from pydantic import AfterValidator, WithJsonSchema
 from pydantic_core import PydanticCustomError
 
 _DYNAMODB_TABLE_NAME_RE = re.compile(r"^[a-zA-Z0-9._-]{3,255}$")
-_RDS_INSTANCE_ID_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9-]{0,62}$")
+_RDS_INSTANCE_ID_RE = re.compile(r"^[a-z][a-z0-9-]{0,62}$")
 
 
 def _validate_dynamodb_table_name(v: str) -> str:
+    """Validate a DynamoDB table name format."""
     if not _DYNAMODB_TABLE_NAME_RE.match(v):
         raise PydanticCustomError(
             "dynamodb_table_name",
@@ -23,6 +24,7 @@ def _validate_dynamodb_table_name(v: str) -> str:
 
 
 def _validate_rds_instance_id(v: str) -> str:
+    """Validate an RDS instance identifier format."""
     if not _RDS_INSTANCE_ID_RE.match(v):
         raise PydanticCustomError(
             "rds_instance_id",
@@ -44,6 +46,7 @@ def _validate_rds_instance_id(v: str) -> str:
     return v
 
 
+# Source: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html
 DynamoDbTableName = Annotated[
     str,
     AfterValidator(_validate_dynamodb_table_name),
@@ -60,14 +63,15 @@ DynamoDbTableName = Annotated[
     ),
 ]
 
+# Source: https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_CreateDBInstance.html
 RdsInstanceId = Annotated[
     str,
     AfterValidator(_validate_rds_instance_id),
     WithJsonSchema(
         {
             "type": "string",
-            "pattern": r"^[a-zA-Z][a-zA-Z0-9-]{0,62}$",
-            "description": "An AWS RDS instance identifier",
+            "pattern": r"^[a-z][a-z0-9-]{0,62}$",
+            "description": "An AWS RDS instance identifier (lowercase only)",
             "examples": ["my-db-instance"],
             "title": "RdsInstanceId",
             "maxLength": 63,

@@ -1,3 +1,5 @@
+"""GCP identity types."""
+
 from __future__ import annotations
 
 import re
@@ -20,18 +22,64 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 _PROJECT_ID_RE = re.compile(r"^[a-z][a-z0-9-]{4,28}[a-z0-9]$")
+_PROJECT_NUMBER_RE = re.compile(r"^[1-9]\d+$")
+_BILLING_ACCOUNT_ID_RE = re.compile(r"^[A-Z0-9]{6}-[A-Z0-9]{6}-[A-Z0-9]{6}$")
+_ORGANIZATION_ID_RE = re.compile(r"^[1-9]\d*$")
+
+_RESERVED_PROJECT_IDS = frozenset({"google", "undefined", "null", "ssl"})
 
 
 def _validate_project_id(v: str) -> str:
+    """Validate a GCP project ID format."""
     if not _PROJECT_ID_RE.match(v):
         raise PydanticCustomError(
             "gcp_project_id",
             "Invalid GCP project ID: {value}",
             {"value": v},
         )
+    if v in _RESERVED_PROJECT_IDS:
+        raise PydanticCustomError(
+            "gcp_project_id",
+            "Invalid GCP project ID: '{value}' is a reserved word",
+            {"value": v},
+        )
     return v
 
 
+def _validate_project_number(v: str) -> str:
+    """Validate a GCP project number format."""
+    if not _PROJECT_NUMBER_RE.match(v):
+        raise PydanticCustomError(
+            "gcp_project_number",
+            "Invalid GCP project number: {value}",
+            {"value": v},
+        )
+    return v
+
+
+def _validate_billing_account_id(v: str) -> str:
+    """Validate a GCP billing account ID format."""
+    if not _BILLING_ACCOUNT_ID_RE.match(v):
+        raise PydanticCustomError(
+            "gcp_billing_account_id",
+            "Invalid GCP billing account ID: {value}",
+            {"value": v},
+        )
+    return v
+
+
+def _validate_organization_id(v: str) -> str:
+    """Validate a GCP organization ID format."""
+    if not _ORGANIZATION_ID_RE.match(v):
+        raise PydanticCustomError(
+            "gcp_organization_id",
+            "Invalid GCP organization ID: {value}",
+            {"value": v},
+        )
+    return v
+
+
+# Source: https://cloud.google.com/resource-manager/docs/creating-managing-projects
 ProjectId = Annotated[
     str,
     AfterValidator(_validate_project_id),
@@ -46,9 +94,57 @@ ProjectId = Annotated[
     ),
 ]
 
+# Source: https://cloud.google.com/resource-manager/docs/creating-managing-projects
+ProjectNumber = Annotated[
+    str,
+    AfterValidator(_validate_project_number),
+    WithJsonSchema(
+        {
+            "type": "string",
+            "pattern": _PROJECT_NUMBER_RE.pattern,
+            "description": "A GCP project number.",
+            "examples": ["123456789012"],
+            "title": "ProjectNumber",
+        }
+    ),
+]
+
+# Source: https://cloud.google.com/billing/docs/how-to/find-billing-account-id
+BillingAccountId = Annotated[
+    str,
+    AfterValidator(_validate_billing_account_id),
+    WithJsonSchema(
+        {
+            "type": "string",
+            "pattern": _BILLING_ACCOUNT_ID_RE.pattern,
+            "description": "A GCP billing account ID.",
+            "examples": ["01A2B3-C4D5E6-F7G8H9"],
+            "title": "BillingAccountId",
+        }
+    ),
+]
+
+# Source: https://cloud.google.com/resource-manager/docs/creating-managing-organization
+OrganizationId = Annotated[
+    str,
+    AfterValidator(_validate_organization_id),
+    WithJsonSchema(
+        {
+            "type": "string",
+            "pattern": _ORGANIZATION_ID_RE.pattern,
+            "description": "A GCP organization ID.",
+            "examples": ["123456789012"],
+            "title": "OrganizationId",
+        }
+    ),
+]
+
 
 class ServiceAccountEmail(str):
-    """A validated GCP service account email."""
+    """A validated GCP service account email.
+
+    Source: https://cloud.google.com/iam/docs/service-accounts-create
+    """
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^([a-z][a-z0-9-]{4,28}[a-z0-9])@([a-z][a-z0-9-]{4,28}[a-z0-9])\.iam\.gserviceaccount\.com$"
@@ -57,6 +153,7 @@ class ServiceAccountEmail(str):
     project_id: str
 
     def __new__(cls, value: str) -> ServiceAccountEmail:
+        """Create and validate a new ServiceAccountEmail instance."""
         m = cls._pattern.match(value)
         if not m:
             raise PydanticCustomError(
@@ -71,18 +168,21 @@ class ServiceAccountEmail(str):
 
     @classmethod
     def _validate(cls, value: str) -> ServiceAccountEmail:
+        """Validate a string as a service account email."""
         return cls(value)
 
     @classmethod
     def __get_pydantic_core_schema__(
         cls, source_type: Any, handler: GetCoreSchemaHandler
     ) -> CoreSchema:
+        """Return the Pydantic core schema for ServiceAccountEmail."""
         return _str_type_core_schema(cls, source_type, handler)
 
     @classmethod
     def __get_pydantic_json_schema__(
         cls, _core_schema: CoreSchema, handler: GetJsonSchemaHandler
     ) -> JsonSchemaValue:
+        """Return the JSON schema for ServiceAccountEmail."""
         return {
             "type": "string",
             "format": "gcp-service-account-email",
@@ -94,7 +194,10 @@ class ServiceAccountEmail(str):
 
 
 class Region(StrEnum):
-    """GCP cloud regions."""
+    """GCP cloud regions.
+
+    Source: https://cloud.google.com/compute/docs/regions-zones
+    """
 
     US_CENTRAL1 = "us-central1"
     US_EAST1 = "us-east1"
@@ -139,13 +242,17 @@ class Region(StrEnum):
 
 
 class Zone(str):
-    """A validated GCP zone (e.g. us-central1-a)."""
+    """A validated GCP zone (e.g. us-central1-a).
+
+    Source: https://cloud.google.com/compute/docs/regions-zones
+    """
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(r"^([a-z]+-[a-z]+\d+(?:-[a-z]+\d+)?)-([a-z])$")
     region: str
     zone_letter: str
 
     def __new__(cls, value: str) -> Zone:
+        """Create and validate a new Zone instance."""
         m = cls._pattern.match(value)
         if not m:
             raise PydanticCustomError("gcp_zone", "Invalid GCP Zone: {value}", {"value": value})
@@ -165,18 +272,21 @@ class Zone(str):
 
     @classmethod
     def _validate(cls, value: str) -> Zone:
+        """Validate a string as a GCP Zone."""
         return cls(value)
 
     @classmethod
     def __get_pydantic_core_schema__(
         cls, source_type: Any, handler: GetCoreSchemaHandler
     ) -> CoreSchema:
+        """Return the Pydantic core schema for Zone."""
         return _str_type_core_schema(cls, source_type, handler)
 
     @classmethod
     def __get_pydantic_json_schema__(
         cls, _core_schema: CoreSchema, handler: GetJsonSchemaHandler
     ) -> JsonSchemaValue:
+        """Return the JSON schema for Zone."""
         return {
             "type": "string",
             "format": "gcp-zone",

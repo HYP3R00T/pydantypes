@@ -576,16 +576,16 @@ requires-dist = [{ name = "pydantic", specifier = ">=2.5.2" }]
 all = [
     { name = "coverage", extras = ["toml"], specifier = ">=7.0.0" },
     { name = "dirty-equals", specifier = ">=0.7.1" },
-    { name = "mypy", specifier = ">=1.0.0" },
+    { name = "mypy", specifier = ">=1.10.0" },
     { name = "pre-commit", specifier = ">=3.0.0" },
     { name = "pytest", specifier = ">=8.0.0" },
     { name = "pytest-cov", specifier = ">=5.0.0" },
-    { name = "ruff", specifier = ">=0.8.0" },
+    { name = "ruff", specifier = ">=0.9.0" },
 ]
 dev = [{ name = "pre-commit", specifier = ">=3.0.0" }]
 lint = [
-    { name = "mypy", specifier = ">=1.0.0" },
-    { name = "ruff", specifier = ">=0.8.0" },
+    { name = "mypy", specifier = ">=1.10.0" },
+    { name = "ruff", specifier = ">=0.9.0" },
 ]
 test = [
     { name = "coverage", extras = ["toml"], specifier = ">=7.0.0" },

@@ -1,15 +1,46 @@
-"""Azure Blob Storage URI type."""
+"""Azure storage types."""
 
 from __future__ import annotations
 
 import re
-from typing import Any, ClassVar
+from typing import Annotated, Any, ClassVar
 
-from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
+from pydantic import AfterValidator, GetCoreSchemaHandler, GetJsonSchemaHandler, WithJsonSchema
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError
 
 from pydantypes._internal import _str_type_core_schema
+
+_STORAGE_ACCOUNT_NAME_RE = re.compile(r"^[a-z0-9]{3,24}$")
+
+
+def _validate_storage_account_name(v: str) -> str:
+    """Validate an Azure Storage account name format."""
+    if not _STORAGE_ACCOUNT_NAME_RE.match(v):
+        raise PydanticCustomError(
+            "azure_storage_account_name",
+            "Invalid Azure Storage account name: {value}",
+            {"value": v},
+        )
+    return v
+
+
+# Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftstorage
+StorageAccountName = Annotated[
+    str,
+    AfterValidator(_validate_storage_account_name),
+    WithJsonSchema(
+        {
+            "type": "string",
+            "pattern": r"^[a-z0-9]{3,24}$",
+            "description": "Azure Storage account name.",
+            "examples": ["mystorageaccount"],
+            "title": "StorageAccountName",
+            "minLength": 3,
+            "maxLength": 24,
+        }
+    ),
+]
 
 
 class BlobStorageUri(str):
@@ -17,11 +48,13 @@ class BlobStorageUri(str):
 
     Validates and parses a URI of the form:
     https://{account}.blob.core.windows.net/{container}[/{blob_path}]
+
+    Source: https://learn.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
     """
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^https://([a-z0-9]{3,24})\.blob\.core\.windows\.net"
-        r"/([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)(?:/(.+))?$"
+        r"/([a-z0-9][a-z0-9-]{1,61}[a-z0-9])(?:/(.+))?$"
     )
 
     account_name: str
@@ -29,6 +62,7 @@ class BlobStorageUri(str):
     blob_path: str
 
     def __new__(cls, value: str) -> BlobStorageUri:
+        """Create and validate a new BlobStorageUri instance."""
         m = cls._pattern.match(value)
         if not m:
             raise PydanticCustomError(
@@ -44,18 +78,21 @@ class BlobStorageUri(str):
 
     @classmethod
     def _validate(cls, value: str) -> BlobStorageUri:
+        """Validate a string as a Blob Storage URI."""
         return cls(value)
 
     @classmethod
     def __get_pydantic_core_schema__(
         cls, source_type: Any, handler: GetCoreSchemaHandler
     ) -> CoreSchema:
+        """Return the Pydantic core schema for BlobStorageUri."""
         return _str_type_core_schema(cls, source_type, handler)
 
     @classmethod
     def __get_pydantic_json_schema__(
         cls, _core_schema: CoreSchema, handler: GetJsonSchemaHandler
     ) -> JsonSchemaValue:
+        """Return the JSON schema for BlobStorageUri."""
         return {
             "type": "string",
             "format": "azure-blob-storage-uri",

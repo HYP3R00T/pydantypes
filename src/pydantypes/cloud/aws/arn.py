@@ -13,10 +13,14 @@ from pydantypes._internal import _str_type_core_schema
 
 
 class Arn(str):
-    """An AWS ARN with parsed components."""
+    """An AWS ARN with parsed components.
+
+    Source: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html
+    """
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
-        r"^arn:(aws|aws-cn|aws-us-gov):([a-z0-9-]+):([a-z0-9-]*):(\d{12}|):(.+)$"
+        r"^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b|aws-iso-e|aws-iso-f)"
+        r":([a-z0-9-]+):([a-z0-9-]*):(\d{12}|):(.+)$"
     )
 
     partition: str  # type: ignore[assignment]
@@ -26,6 +30,7 @@ class Arn(str):
     resource: str
 
     def __new__(cls, value: str) -> Arn:
+        """Create and validate a new Arn instance."""
         m = cls._pattern.match(value)
         if not m:
             raise PydanticCustomError(
@@ -43,18 +48,21 @@ class Arn(str):
 
     @classmethod
     def _validate(cls, value: str) -> Arn:
+        """Validate a string as an ARN."""
         return cls(value)
 
     @classmethod
     def __get_pydantic_core_schema__(
         cls, source_type: Any, handler: GetCoreSchemaHandler
     ) -> CoreSchema:
+        """Return the Pydantic core schema for Arn."""
         return _str_type_core_schema(cls, source_type, handler)
 
     @classmethod
     def __get_pydantic_json_schema__(
         cls, _core_schema: CoreSchema, handler: GetJsonSchemaHandler
     ) -> JsonSchemaValue:
+        """Return the JSON schema for Arn."""
         return {
             "type": "string",
             "format": "aws-arn",
@@ -68,11 +76,15 @@ class Arn(str):
 
 
 class IamRoleArn(Arn):
-    """An IAM Role ARN with parsed role name."""
+    """An IAM Role ARN with parsed role name.
+
+    Source: https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html
+    """
 
     role_name: str
 
     def __new__(cls, value: str) -> IamRoleArn:
+        """Create and validate a new IamRoleArn instance."""
         instance = cast(IamRoleArn, Arn.__new__(cls, value))
         if instance.service != "iam" or not instance.resource.startswith("role/"):
             raise PydanticCustomError(
@@ -86,18 +98,21 @@ class IamRoleArn(Arn):
 
     @classmethod
     def _validate(cls, value: str) -> IamRoleArn:
+        """Validate a string as an IAM Role ARN."""
         return cls(value)
 
     @classmethod
     def __get_pydantic_core_schema__(
         cls, source_type: Any, handler: GetCoreSchemaHandler
     ) -> CoreSchema:
+        """Return the Pydantic core schema for IamRoleArn."""
         return _str_type_core_schema(cls, source_type, handler)
 
     @classmethod
     def __get_pydantic_json_schema__(
         cls, _core_schema: CoreSchema, handler: GetJsonSchemaHandler
     ) -> JsonSchemaValue:
+        """Return the JSON schema for IamRoleArn."""
         return {
             "type": "string",
             "format": "aws-iam-role-arn",
@@ -109,11 +124,15 @@ class IamRoleArn(Arn):
 
 
 class SnsTopicArn(Arn):
-    """An SNS Topic ARN with parsed topic name."""
+    """An SNS Topic ARN with parsed topic name.
+
+    Source: https://docs.aws.amazon.com/sns/latest/api/API_CreateTopic.html
+    """
 
     topic_name: str
 
     def __new__(cls, value: str) -> SnsTopicArn:
+        """Create and validate a new SnsTopicArn instance."""
         instance = cast(SnsTopicArn, Arn.__new__(cls, value))
         if instance.service != "sns":
             raise PydanticCustomError(
@@ -126,18 +145,21 @@ class SnsTopicArn(Arn):
 
     @classmethod
     def _validate(cls, value: str) -> SnsTopicArn:
+        """Validate a string as an SNS Topic ARN."""
         return cls(value)
 
     @classmethod
     def __get_pydantic_core_schema__(
         cls, source_type: Any, handler: GetCoreSchemaHandler
     ) -> CoreSchema:
+        """Return the Pydantic core schema for SnsTopicArn."""
         return _str_type_core_schema(cls, source_type, handler)
 
     @classmethod
     def __get_pydantic_json_schema__(
         cls, _core_schema: CoreSchema, handler: GetJsonSchemaHandler
     ) -> JsonSchemaValue:
+        """Return the JSON schema for SnsTopicArn."""
         return {
             "type": "string",
             "format": "aws-sns-topic-arn",

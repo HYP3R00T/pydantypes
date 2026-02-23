@@ -44,6 +44,7 @@ def test_valid_sqs_queue_url(value: str, region: str, account_id: str, queue_nam
         "https://sqs.us-east-1.amazonaws.com/12345/my-queue",
         "https://wrong.domain.com/123456789012/my-queue",
         "",
+        "https://sqs.us-east-1.amazonaws.com/123456789012/" + "a" * 81,
     ],
 )
 def test_invalid_sqs_queue_url(value: str) -> None:

@@ -1,15 +1,27 @@
-"""Tests for AWS S3 storage types."""
+"""Tests for AWS storage types."""
 
 from __future__ import annotations
 
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from pydantypes.cloud.aws.storage import S3Uri
+from pydantypes.cloud.aws.storage import EbsSnapshotId, EbsVolumeId, S3BucketName, S3Uri
 
 
 class S3UriModel(BaseModel):
     uri: S3Uri
+
+
+class S3BucketModel(BaseModel):
+    bucket: S3BucketName
+
+
+class EbsVolModel(BaseModel):
+    vol_id: EbsVolumeId
+
+
+class EbsSnapModel(BaseModel):
+    snap_id: EbsSnapshotId
 
 
 @pytest.mark.parametrize(
@@ -40,6 +52,9 @@ def test_valid_s3_uri(value: str, expected_bucket: str, expected_key: str) -> No
         "",
         "s3://-invalid/key",
         "not-an-s3-uri",
+        "s3://my..bucket/key",
+        "s3://xn--mybucket/key",
+        "s3://192.168.1.1/key",
     ],
 )
 def test_invalid_s3_uri(value: str) -> None:
@@ -68,3 +83,72 @@ def test_s3_uri_json_schema() -> None:
     assert field_schema["type"] == "string"
     assert field_schema["format"] == "s3-uri"
     assert "pattern" in field_schema
+
+
+@pytest.mark.parametrize("value", ["my-bucket", "a1b2c3d4", "my.dotted.bucket"])
+def test_valid_s3_bucket_name(value: str) -> None:
+    model = S3BucketModel(bucket=value)
+    assert model.bucket == value
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        "ab",
+        "UPPER",
+        "my..bucket",
+        "my-.bucket",
+        "my.-bucket",
+        "192.168.1.1",
+        "xn--mybucket",
+        "sthree-mybucket",
+        "amzn-s3-demo-mybucket",
+        "mybucket-s3alias",
+        "mybucket--ol-s3",
+        "mybucket.mrap",
+        "mybucket--x-s3",
+        "mybucket--table-s3",
+    ],
+)
+def test_invalid_s3_bucket_name(value: str) -> None:
+    with pytest.raises(ValidationError):
+        S3BucketModel(bucket=value)
+
+
+def test_s3_bucket_name_serialization() -> None:
+    model = S3BucketModel(bucket="my-bucket")
+    assert model.model_dump() == {"bucket": "my-bucket"}
+
+
+@pytest.mark.parametrize("value", ["vol-1234567890abcdef0", "vol-12345678"])
+def test_valid_ebs_volume_id(value: str) -> None:
+    model = EbsVolModel(vol_id=value)
+    assert model.vol_id == value
+
+
+@pytest.mark.parametrize("value", ["vol-", "vol-UPPER", ""])
+def test_invalid_ebs_volume_id(value: str) -> None:
+    with pytest.raises(ValidationError):
+        EbsVolModel(vol_id=value)
+
+
+def test_ebs_volume_id_serialization() -> None:
+    model = EbsVolModel(vol_id="vol-1234567890abcdef0")
+    assert model.model_dump() == {"vol_id": "vol-1234567890abcdef0"}
+
+
+@pytest.mark.parametrize("value", ["snap-1234567890abcdef0", "snap-12345678"])
+def test_valid_ebs_snapshot_id(value: str) -> None:
+    model = EbsSnapModel(snap_id=value)
+    assert model.snap_id == value
+
+
+@pytest.mark.parametrize("value", ["snap-", "snap-UPPER", ""])
+def test_invalid_ebs_snapshot_id(value: str) -> None:
+    with pytest.raises(ValidationError):
+        EbsSnapModel(snap_id=value)
+
+
+def test_ebs_snapshot_id_serialization() -> None:
+    model = EbsSnapModel(snap_id="snap-1234567890abcdef0")
+    assert model.model_dump() == {"snap_id": "snap-1234567890abcdef0"}

@@ -1,24 +1,28 @@
-"""Tests for messaging."""
+"""Tests for Azure messaging types."""
 
 from __future__ import annotations
 
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from pydantypes.cloud.azure.messaging import ServiceBusNamespace
+from pydantypes.cloud.azure.messaging import EventHubNamespaceName, ServiceBusNamespace
 
 
 class ServiceBusNamespaceModel(BaseModel):
     field: ServiceBusNamespace
 
 
-@pytest.mark.parametrize("value", ["myservicebus123", "abcdef", "my-servicebus-ns"])
+class EventHubModel(BaseModel):
+    field: EventHubNamespaceName
+
+
+@pytest.mark.parametrize("value", ["myservicebus123", "abcdef", "my-servicebus-ns", "a--double-ns"])
 def test_valid_service_bus_namespace(value: str) -> None:
     m = ServiceBusNamespaceModel(field=value)
     assert m.field == value
 
 
-@pytest.mark.parametrize("value", ["abcde", "1start", "a--bad-ns", "abcde-"])
+@pytest.mark.parametrize("value", ["abcde", "1start", "abcde-"])
 def test_invalid_service_bus_namespace(value: str) -> None:
     with pytest.raises(ValidationError):
         ServiceBusNamespaceModel(field=value)
@@ -33,3 +37,20 @@ def test_service_bus_namespace_json_schema() -> None:
     schema = ServiceBusNamespaceModel.model_json_schema()
     props = schema["properties"]["field"]
     assert props["type"] == "string"
+
+
+@pytest.mark.parametrize("value", ["my-eventhub-ns", "abcdef", "eventhub123456"])
+def test_valid_event_hub_namespace_name(value: str) -> None:
+    m = EventHubModel(field=value)
+    assert m.field == value
+
+
+@pytest.mark.parametrize("value", ["abcde", "1start", ""])
+def test_invalid_event_hub_namespace_name(value: str) -> None:
+    with pytest.raises(ValidationError):
+        EventHubModel(field=value)
+
+
+def test_event_hub_namespace_name_serialization() -> None:
+    m = EventHubModel(field="my-eventhub-ns")
+    assert m.model_dump()["field"] == "my-eventhub-ns"

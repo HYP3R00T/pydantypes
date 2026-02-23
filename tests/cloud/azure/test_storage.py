@@ -1,15 +1,19 @@
-"""Tests for storage."""
+"""Tests for Azure storage types."""
 
 from __future__ import annotations
 
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from pydantypes.cloud.azure.storage import BlobStorageUri
+from pydantypes.cloud.azure.storage import BlobStorageUri, StorageAccountName
 
 
 class BlobStorageUriModel(BaseModel):
     field: BlobStorageUri
+
+
+class StorageAccountNameModel(BaseModel):
+    field: StorageAccountName
 
 
 @pytest.mark.parametrize(
@@ -17,7 +21,7 @@ class BlobStorageUriModel(BaseModel):
     [
         "https://myaccount.blob.core.windows.net/mycontainer/path/to/blob",
         "https://myaccount.blob.core.windows.net/mycontainer",
-        "https://abc.blob.core.windows.net/c",
+        "https://abc.blob.core.windows.net/abc",
     ],
 )
 def test_valid_blob_storage_uri(value: str) -> None:
@@ -28,10 +32,12 @@ def test_valid_blob_storage_uri(value: str) -> None:
 @pytest.mark.parametrize(
     "value",
     [
-        "http://myaccount.blob.core.windows.net/c",
-        "https://ab.blob.core.windows.net/c",
+        "http://myaccount.blob.core.windows.net/abc",
+        "https://ab.blob.core.windows.net/abc",
         "https://myaccount.blob.core.windows.net",
         "not-a-uri",
+        "https://abc.blob.core.windows.net/c",
+        "https://abc.blob.core.windows.net/ab",
     ],
 )
 def test_invalid_blob_storage_uri(value: str) -> None:
@@ -74,3 +80,20 @@ def test_blob_storage_uri_existing_instance() -> None:
     uri = BlobStorageUri("https://myaccount.blob.core.windows.net/mycontainer/path/to/blob")
     m = BlobStorageUriModel(field=uri)
     assert m.field is uri
+
+
+@pytest.mark.parametrize("value", ["mystorageaccount", "abc", "a1b"])
+def test_valid_storage_account_name(value: str) -> None:
+    m = StorageAccountNameModel(field=value)
+    assert m.field == value
+
+
+@pytest.mark.parametrize("value", ["ab", "MyAccount", "my-account", "a" * 25, ""])
+def test_invalid_storage_account_name(value: str) -> None:
+    with pytest.raises(ValidationError):
+        StorageAccountNameModel(field=value)
+
+
+def test_storage_account_name_serialization() -> None:
+    m = StorageAccountNameModel(field="mystorageaccount")
+    assert m.model_dump()["field"] == "mystorageaccount"

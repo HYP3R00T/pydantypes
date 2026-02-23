@@ -1,4 +1,4 @@
-"""Azure identity types: SubscriptionId, TenantId, ResourceGroupName, Region."""
+"""Azure identity types."""
 
 from __future__ import annotations
 
@@ -26,10 +26,8 @@ _UUID_PATTERN = re.compile(
 _RESOURCE_GROUP_PATTERN = re.compile(r"^[a-zA-Z0-9_\-.()]{1,90}$")
 
 
-# --- SubscriptionId ---
-
-
 def _validate_subscription_id(v: str) -> str:
+    """Validate an Azure subscription ID format."""
     if not _UUID_PATTERN.match(v):
         raise PydanticCustomError(
             "azure_subscription_id",
@@ -39,6 +37,7 @@ def _validate_subscription_id(v: str) -> str:
     return v.lower()
 
 
+# Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules
 SubscriptionId = Annotated[
     str,
     AfterValidator(_validate_subscription_id),
@@ -54,10 +53,8 @@ SubscriptionId = Annotated[
 ]
 
 
-# --- TenantId ---
-
-
 def _validate_tenant_id(v: str) -> str:
+    """Validate an Azure tenant ID format."""
     if not _UUID_PATTERN.match(v):
         raise PydanticCustomError(
             "azure_tenant_id",
@@ -67,6 +64,7 @@ def _validate_tenant_id(v: str) -> str:
     return v.lower()
 
 
+# Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules
 TenantId = Annotated[
     str,
     AfterValidator(_validate_tenant_id),
@@ -82,10 +80,8 @@ TenantId = Annotated[
 ]
 
 
-# --- ResourceGroupName ---
-
-
 def _validate_resource_group_name(v: str) -> str:
+    """Validate an Azure resource group name format."""
     if not _RESOURCE_GROUP_PATTERN.match(v) or v.endswith("."):
         raise PydanticCustomError(
             "azure_resource_group_name",
@@ -95,6 +91,7 @@ def _validate_resource_group_name(v: str) -> str:
     return v
 
 
+# Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftresources
 ResourceGroupName = Annotated[
     str,
     AfterValidator(_validate_resource_group_name),
@@ -110,11 +107,11 @@ ResourceGroupName = Annotated[
 ]
 
 
-# --- Region ---
-
-
 class Region(StrEnum):
-    """Azure region identifiers."""
+    """Azure region identifiers.
+
+    Source: https://learn.microsoft.com/en-us/azure/reliability/regions-list
+    """
 
     # US
     EASTUS = "eastus"
@@ -181,6 +178,8 @@ class Region(StrEnum):
     POLANDCENTRAL = "polandcentral"
     SPAINCENTRAL = "spaincentral"
     MEXICOCENTRAL = "mexicocentral"
+    NEWZEALANDNORTH = "newzealandnorth"
+    TAIWANNORTH = "taiwannorth"
 
     # US Government
     USGOVVIRGINIA = "usgovvirginia"

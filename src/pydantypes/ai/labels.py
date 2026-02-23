@@ -14,7 +14,7 @@ from pydantic_core import CoreSchema, PydanticCustomError, core_schema
 class Label:
     """Descriptor for LabelEnum members with lifecycle metadata."""
 
-    __slots__ = ("value", "description", "note", "deprecated", "retired", "successor", "aliases")
+    __slots__ = ("aliases", "deprecated", "description", "note", "retired", "successor", "value")
 
     def __init__(
         self,

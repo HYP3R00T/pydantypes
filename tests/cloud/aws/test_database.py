@@ -42,7 +42,9 @@ def test_valid_rds_instance_id(value: str) -> None:
     assert model.instance == value
 
 
-@pytest.mark.parametrize("value", ["", "1starts-with-number", "my--db", "my-db-"])
+@pytest.mark.parametrize(
+    "value", ["", "1starts-with-number", "my--db", "my-db-", "MyDB", "Abc-123"]
+)
 def test_invalid_rds_instance_id(value: str) -> None:
     with pytest.raises(ValidationError):
         RdsModel(instance=value)

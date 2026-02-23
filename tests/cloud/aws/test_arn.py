@@ -55,6 +55,22 @@ class SnsTopicArnModel(BaseModel):
             "123456789012",
             "my-topic",
         ),
+        (
+            "arn:aws-iso:s3:::my-bucket",
+            "aws-iso",
+            "s3",
+            "",
+            "",
+            "my-bucket",
+        ),
+        (
+            "arn:aws-iso-b:ec2:us-isob-east-1:123456789012:instance/i-1234",
+            "aws-iso-b",
+            "ec2",
+            "us-isob-east-1",
+            "123456789012",
+            "instance/i-1234",
+        ),
     ],
 )
 def test_valid_arn(

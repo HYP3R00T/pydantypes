@@ -19,9 +19,11 @@ from pydantic import AfterValidator, WithJsonSchema
 from pydantic_core import PydanticCustomError
 
 _ACCOUNT_ID_RE = re.compile(r"^\d{12}$")
+_COGNITO_USER_POOL_ID_RE = re.compile(r"^[\w-]+_[0-9a-zA-Z]+$")
 
 
 def _validate_account_id(v: str) -> str:
+    """Validate an AWS account ID format."""
     if not _ACCOUNT_ID_RE.match(v):
         raise PydanticCustomError(
             "aws_account_id",
@@ -31,6 +33,24 @@ def _validate_account_id(v: str) -> str:
     return v
 
 
+def _validate_cognito_user_pool_id(v: str) -> str:
+    """Validate a Cognito User Pool ID format."""
+    if len(v) > 55:
+        raise PydanticCustomError(
+            "cognito_user_pool_id",
+            "Invalid Cognito User Pool ID: exceeds 55 characters. Got: {value}",
+            {"value": v},
+        )
+    if not _COGNITO_USER_POOL_ID_RE.match(v):
+        raise PydanticCustomError(
+            "cognito_user_pool_id",
+            "Invalid Cognito User Pool ID: {value}",
+            {"value": v},
+        )
+    return v
+
+
+# Source: https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-identifiers.html
 AccountId = Annotated[
     str,
     AfterValidator(_validate_account_id),
@@ -47,8 +67,29 @@ AccountId = Annotated[
     ),
 ]
 
+# Source: https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_CreateUserPool.html
+CognitoUserPoolId = Annotated[
+    str,
+    AfterValidator(_validate_cognito_user_pool_id),
+    WithJsonSchema(
+        {
+            "type": "string",
+            "pattern": r"^[\w-]+_[0-9a-zA-Z]+$",
+            "description": "An AWS Cognito User Pool ID",
+            "examples": ["us-east-1_AbCdEfGhI"],
+            "title": "CognitoUserPoolId",
+            "maxLength": 55,
+        }
+    ),
+]
+
 
 class Region(StrEnum):
+    """AWS region identifiers.
+
+    Source: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html
+    """
+
     US_EAST_1 = "us-east-1"
     US_EAST_2 = "us-east-2"
     US_WEST_1 = "us-west-1"
@@ -61,6 +102,8 @@ class Region(StrEnum):
     AP_SOUTHEAST_2 = "ap-southeast-2"
     AP_SOUTHEAST_3 = "ap-southeast-3"
     AP_SOUTHEAST_4 = "ap-southeast-4"
+    AP_SOUTHEAST_5 = "ap-southeast-5"
+    AP_SOUTHEAST_7 = "ap-southeast-7"
     AP_NORTHEAST_1 = "ap-northeast-1"
     AP_NORTHEAST_2 = "ap-northeast-2"
     AP_NORTHEAST_3 = "ap-northeast-3"
@@ -77,6 +120,7 @@ class Region(StrEnum):
     IL_CENTRAL_1 = "il-central-1"
     ME_SOUTH_1 = "me-south-1"
     ME_CENTRAL_1 = "me-central-1"
+    MX_CENTRAL_1 = "mx-central-1"
     SA_EAST_1 = "sa-east-1"
     US_GOV_EAST_1 = "us-gov-east-1"
     US_GOV_WEST_1 = "us-gov-west-1"

@@ -1,4 +1,4 @@
-"""Tests for identity."""
+"""Tests for Azure identity types."""
 
 from __future__ import annotations
 
@@ -127,3 +127,8 @@ def test_invalid_region() -> None:
 def test_region_enum_values() -> None:
     assert Region.WESTEUROPE == "westeurope"
     assert Region.JAPANEAST == "japaneast"
+
+
+def test_new_regions() -> None:
+    assert Region.NEWZEALANDNORTH == "newzealandnorth"
+    assert Region.TAIWANNORTH == "taiwannorth"
