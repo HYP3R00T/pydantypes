@@ -12,15 +12,12 @@ Use when the validated string has **extractable components** (e.g., bucket + key
 
 ```python
 # Source: https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html
-class S3Uri(str):
+class S3Uri(CloudStorageUri):
     """An S3 URI like s3://bucket/key with parsed properties."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^s3://([a-z0-9][a-z0-9.\-]{1,61}[a-z0-9])(/(.*))?$"
     )
-
-    bucket: str
-    key: str
 
     def __new__(cls, value: str) -> S3Uri:
         """Create and validate a new S3Uri instance."""
@@ -60,6 +57,7 @@ class S3Uri(str):
 ```
 
 Key rules:
+- Cloud storage URI types inherit from `CloudStorageUri`; other Pattern A types inherit from `str`
 - Regex lives on the class as `_pattern: ClassVar[re.Pattern[str]]`
 - Parsed properties are set as instance attributes in `__new__`
 - `_validate` is a one-liner that delegates to `__new__`
@@ -169,6 +167,15 @@ The placement depends on the pattern:
 
 Module-level regexes use the naming convention `_UPPER_SNAKE_CASE_RE`.
 
+### Why Python `re` Instead of Pydantic's Rust Regex
+
+Pydantic v2 uses the Rust `regex` crate internally for `Field(pattern=...)` constraints — faster, with linear-time guarantees. We use Python's `re.compile` instead for two reasons:
+
+- **Pattern A types need capture groups.** Our `__new__` methods extract parsed properties (`.bucket`, `.key`, etc.) from match groups. Pydantic's Rust regex only does accept/reject — it cannot return match groups to Python.
+- **Custom error messages.** `AfterValidator` + `PydanticCustomError` gives us control over error codes and messages. Pydantic's built-in `pattern` constraint produces generic errors.
+
+This is not a performance concern. Our regexes are simple (anchored, no backtracking risk), and the Python function call overhead already dominates over the regex match itself.
+
 ## Source URL References
 
 Every type must have a `# Source:` comment on the line directly above its definition, linking to the official documentation. This applies uniformly to all patterns — no source URLs inside docstrings.
@@ -199,10 +206,10 @@ Rules:
 Every module, class, and function has a docstring.
 
 - **Module:** `"""AWS storage types."""` — short, descriptive
-- **Pattern A class:** One-liner + blank line + `Source:` URL
+- **Pattern A class:** `"""An S3 URI like s3://bucket/key with parsed properties."""` — one-liner
 - **Pattern A methods:** `"""Create and validate a new S3Uri instance."""` — one-line, imperative
 - **Pattern B validator:** `"""Validate an EC2 instance ID format."""` — one-line, imperative
-- **Pattern C class:** One-liner + blank line + `Source:` URL
+- **Pattern C class:** `"""AWS region identifiers."""` — one-liner
 - **`__init__.py`:** `"""AWS cloud resource types."""` — descriptive module docstring
 - **Test module:** `"""Tests for AWS storage types."""`
 
@@ -377,3 +384,26 @@ _validate_s3_bucket_name(bucket)  # reuse S3BucketName's validator
 bucket = m.group(1)
 _validate_gcs_bucket_name(bucket)  # reuse GcsBucketName's validator
 ```
+
+## CloudStorageUri Base Class
+
+All cloud storage URI types (`S3Uri`, `GcsUri`, `BlobStorageUri`) inherit from `CloudStorageUri` (`cloud/_base.py`), which provides:
+
+- **Unified interface** — `.bucket` and `.key` across all providers
+- **Path helpers** — `.name`, `.suffix`, `.stem`, `.parent_key`, `.suffixes`, `.parts`
+- **Heuristic helpers** — `.is_file`, `.is_folder` (based on key naming conventions)
+
+Path helpers delegate to `PurePosixPath(self.key)` internally.
+
+### Attribute Naming
+
+| Concept | Unified name | Provider-specific aliases |
+|---------|-------------|--------------------------|
+| Bucket/container | `.bucket` | Azure: `.container` |
+| Object path | `.key` | Azure: `.blob_path` |
+
+S3Uri and GcsUri use only the unified names. BlobStorageUri exposes both unified names (from base class) and Azure-specific aliases (`.account_name`, `.container`, `.blob_path`).
+
+### Subclass Contract
+
+Subclasses must set `bucket` and `key` as instance attributes in `__new__`. The base class does not define `__new__` — each provider has its own regex and validation. Pydantic integration (`__get_pydantic_core_schema__`, `__get_pydantic_json_schema__`) remains on each subclass.

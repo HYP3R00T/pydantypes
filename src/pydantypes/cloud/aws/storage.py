@@ -10,6 +10,7 @@ from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError
 
 from pydantypes._internal import _str_type_core_schema
+from pydantypes.cloud._base import CloudStorageUri
 
 _S3_BUCKET_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$")
 _EBS_VOLUME_ID_RE = re.compile(r"^vol-[0-9a-f]{8,17}$")
@@ -100,15 +101,12 @@ S3BucketName = Annotated[
 
 
 # Source: https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html
-class S3Uri(str):
+class S3Uri(CloudStorageUri):
     """An S3 URI like s3://bucket/key with parsed properties."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^s3://([a-z0-9][a-z0-9.\-]{1,61}[a-z0-9])(/(.*))?$"
     )
-
-    bucket: str
-    key: str
 
     def __new__(cls, value: str) -> S3Uri:
         """Create and validate a new S3Uri instance."""

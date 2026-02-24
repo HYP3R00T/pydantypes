@@ -17,20 +17,20 @@ class BucketModel(BaseModel):
 
 
 class TestGcsUriValid:
-    def test_bucket_and_path(self) -> None:
+    def test_bucket_and_key(self) -> None:
         uri = GcsUri("gs://my-bucket/path/to/file")
         assert uri.bucket == "my-bucket"
-        assert uri.path == "path/to/file"
+        assert uri.key == "path/to/file"
 
-    def test_no_path(self) -> None:
+    def test_no_key(self) -> None:
         uri = GcsUri("gs://my-bucket")
         assert uri.bucket == "my-bucket"
-        assert uri.path == ""
+        assert uri.key == ""
 
     def test_dotted_bucket(self) -> None:
         uri = GcsUri("gs://my.dotted.bucket/key")
         assert uri.bucket == "my.dotted.bucket"
-        assert uri.path == "key"
+        assert uri.key == "key"
 
     def test_pydantic_model(self) -> None:
         m = GcsModel(uri="gs://my-bucket/path/to/file")

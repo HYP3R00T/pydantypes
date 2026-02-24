@@ -13,6 +13,7 @@ else:
     class StrEnum(str, Enum):
         """String enum backcompat shim for Python 3.10."""
 
+
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema
 

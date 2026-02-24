@@ -16,8 +16,8 @@ from pydantypes.cloud.gcp.identity import (
     ProjectNumber,
     ServiceAccountEmail,
 )
-from pydantypes.cloud.gcp.region import Region, Zone
 from pydantypes.cloud.gcp.messaging import PubSubSubscriptionName, PubSubTopicName
+from pydantypes.cloud.gcp.region import Region, Zone
 from pydantypes.cloud.gcp.security import (
     KmsKeyName,
     SecretManagerSecretName,

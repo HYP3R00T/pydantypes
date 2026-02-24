@@ -17,9 +17,9 @@ from pydantypes.cloud.azure.database import (
     SqlServerName,
 )
 from pydantypes.cloud.azure.identity import ResourceGroupName, SubscriptionId, TenantId
-from pydantypes.cloud.azure.region import Region
 from pydantypes.cloud.azure.keyvault import KeyVaultName, KeyVaultSecretName, KeyVaultUri
 from pydantypes.cloud.azure.messaging import EventHubNamespaceName, ServiceBusNamespace
+from pydantypes.cloud.azure.region import Region
 from pydantypes.cloud.azure.resource import ResourceId
 from pydantypes.cloud.azure.storage import BlobStorageUri, StorageAccountName
 

@@ -52,11 +52,15 @@ def test_blob_storage_uri_properties() -> None:
     assert m.field.account_name == "myaccount"
     assert m.field.container == "mycontainer"
     assert m.field.blob_path == "path/to/blob"
+    # Unified interface
+    assert m.field.bucket == "mycontainer"
+    assert m.field.key == "path/to/blob"
 
 
 def test_blob_storage_uri_no_path() -> None:
     m = BlobStorageUriModel(field="https://myaccount.blob.core.windows.net/mycontainer")
     assert m.field.blob_path == ""
+    assert m.field.key == ""
 
 
 def test_blob_storage_uri_serialization() -> None:

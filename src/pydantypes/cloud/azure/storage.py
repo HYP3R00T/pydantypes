@@ -10,6 +10,7 @@ from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError
 
 from pydantypes._internal import _str_type_core_schema
+from pydantypes.cloud._base import CloudStorageUri
 
 _STORAGE_ACCOUNT_NAME_RE = re.compile(r"^[a-z0-9]{3,24}$")
 
@@ -44,7 +45,7 @@ StorageAccountName = Annotated[
 
 
 # Source: https://learn.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
-class BlobStorageUri(str):
+class BlobStorageUri(CloudStorageUri):
     """Azure Blob Storage URI (https://{account}.blob.core.windows.net/{container}/{blob})."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
@@ -68,7 +69,9 @@ class BlobStorageUri(str):
         instance = str.__new__(cls, value)
         instance.account_name = m.group(1)
         instance.container = m.group(2)
+        instance.bucket = m.group(2)
         instance.blob_path = m.group(3) or ""
+        instance.key = m.group(3) or ""
         return instance
 
     @classmethod

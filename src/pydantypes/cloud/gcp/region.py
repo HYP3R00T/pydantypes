@@ -9,9 +9,7 @@ from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError
 
-from pydantypes._internal import StrEnum
-
-from pydantypes._internal import _str_type_core_schema
+from pydantypes._internal import StrEnum, _str_type_core_schema
 
 
 # Source: https://cloud.google.com/compute/docs/regions-zones
@@ -62,7 +60,15 @@ class Region(StrEnum):
 
 # Source: https://cloud.google.com/compute/docs/regions-zones
 class Zone(str):
-    """A validated GCP zone (e.g. us-central1-a)."""
+    """A validated GCP zone (e.g. us-central1-a).
+
+    GCP zones use globally consistent names ({region}-{letter}), unlike AWS and
+    Azure where zone names are randomly mapped per account/subscription. This
+    makes GCP zones the only cloud provider zones worth validating as a type
+    with parsed properties (.region, .zone_letter).
+
+    Source: https://cloud.google.com/compute/docs/regions-zones
+    """
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(r"^([a-z]+-[a-z]+\d+(?:-[a-z]+\d+)?)-([a-z])$")
     region: str

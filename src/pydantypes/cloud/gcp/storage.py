@@ -10,6 +10,7 @@ from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import CoreSchema, PydanticCustomError
 
 from pydantypes._internal import _str_type_core_schema
+from pydantypes.cloud._base import CloudStorageUri
 
 _GCS_BUCKET_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{1,61}[a-z0-9]$")
 
@@ -68,14 +69,12 @@ GcsBucketName = Annotated[
 
 
 # Source: https://cloud.google.com/storage/docs/request-endpoints
-class GcsUri(str):
-    """A validated Google Cloud Storage URI (gs://bucket/path)."""
+class GcsUri(CloudStorageUri):
+    """A validated Google Cloud Storage URI (gs://bucket/key)."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^gs://([a-z0-9][a-z0-9._-]{1,61}[a-z0-9])(?:/(.*))?$"
     )
-    bucket: str
-    path: str
 
     def __new__(cls, value: str) -> GcsUri:
         """Create and validate a new GcsUri instance."""
@@ -86,7 +85,7 @@ class GcsUri(str):
         _validate_gcs_bucket_name(bucket)
         instance = str.__new__(cls, value)
         instance.bucket = bucket
-        instance.path = m.group(2) or ""
+        instance.key = m.group(2) or ""
         return instance
 
     @classmethod
@@ -110,7 +109,7 @@ class GcsUri(str):
             "type": "string",
             "format": "gcs-uri",
             "pattern": cls._pattern.pattern,
-            "description": "A Google Cloud Storage URI (gs://bucket/path).",
+            "description": "A Google Cloud Storage URI (gs://bucket/key).",
             "examples": ["gs://my-bucket/path/to/file.csv"],
             "title": "GcsUri",
         }

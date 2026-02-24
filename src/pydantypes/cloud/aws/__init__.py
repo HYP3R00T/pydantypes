@@ -11,7 +11,6 @@ from pydantypes.cloud.aws.compute import (
 from pydantypes.cloud.aws.containers import EcrRepositoryUri
 from pydantypes.cloud.aws.database import DynamoDbTableName, RdsInstanceId
 from pydantypes.cloud.aws.identity import AccountId, CognitoUserPoolId
-from pydantypes.cloud.aws.region import Region
 from pydantypes.cloud.aws.messaging import SqsQueueUrl
 from pydantypes.cloud.aws.monitoring import CloudWatchLogGroupName
 from pydantypes.cloud.aws.network import (
@@ -25,6 +24,7 @@ from pydantypes.cloud.aws.network import (
     SubnetId,
     VpcId,
 )
+from pydantypes.cloud.aws.region import Region
 from pydantypes.cloud.aws.security import KmsKeyId, SecretsManagerSecretName, SsmParameterName
 from pydantypes.cloud.aws.storage import EbsSnapshotId, EbsVolumeId, S3BucketName, S3Uri
 
