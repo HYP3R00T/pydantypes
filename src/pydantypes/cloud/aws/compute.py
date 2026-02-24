@@ -70,7 +70,7 @@ def _validate_eks_cluster_name(v: str) -> str:
     return v
 
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 Ec2InstanceId = Annotated[
     str,
     AfterValidator(_validate_ec2_instance_id),
@@ -101,7 +101,7 @@ LambdaFunctionName = Annotated[
     ),
 ]
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 AmiId = Annotated[
     str,
     AfterValidator(_validate_ami_id),

@@ -140,11 +140,9 @@ OrganizationId = Annotated[
 ]
 
 
+# Source: https://cloud.google.com/iam/docs/service-accounts-create
 class ServiceAccountEmail(str):
-    """A validated GCP service account email.
-
-    Source: https://cloud.google.com/iam/docs/service-accounts-create
-    """
+    """A validated GCP service account email."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^([a-z][a-z0-9-]{4,28}[a-z0-9])@([a-z][a-z0-9-]{4,28}[a-z0-9])\.iam\.gserviceaccount\.com$"
@@ -193,11 +191,9 @@ class ServiceAccountEmail(str):
         }
 
 
+# Source: https://cloud.google.com/compute/docs/regions-zones
 class Region(StrEnum):
-    """GCP cloud regions.
-
-    Source: https://cloud.google.com/compute/docs/regions-zones
-    """
+    """GCP cloud regions."""
 
     US_CENTRAL1 = "us-central1"
     US_EAST1 = "us-east1"
@@ -241,11 +237,9 @@ class Region(StrEnum):
     AFRICA_SOUTH1 = "africa-south1"
 
 
+# Source: https://cloud.google.com/compute/docs/regions-zones
 class Zone(str):
-    """A validated GCP zone (e.g. us-central1-a).
-
-    Source: https://cloud.google.com/compute/docs/regions-zones
-    """
+    """A validated GCP zone (e.g. us-central1-a)."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(r"^([a-z]+-[a-z]+\d+(?:-[a-z]+\d+)?)-([a-z])$")
     region: str

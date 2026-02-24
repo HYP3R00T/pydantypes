@@ -57,6 +57,10 @@ grep -r "class.*Type" src/ --include="*.py" | head -20
 
 All imports at file top — ONLY exception is circular imports.
 
+### Every Type Must Have a `# Source:` Comment
+
+Every type definition must have a `# Source: <url>` comment on the line directly above it, linking to the official documentation for the format being validated. No exceptions for any pattern (class, Annotated, StrEnum). The URL must be verified to load and be the correct reference. Never put source URLs inside docstrings.
+
 ### Never Reference Removed Code in Comments
 
 Comments describe what code DOES, not what it USED TO DO. Git tracks history.

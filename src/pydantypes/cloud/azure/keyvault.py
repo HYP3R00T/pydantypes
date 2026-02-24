@@ -20,14 +20,9 @@ _KEY_VAULT_NAME_RE = re.compile(r"^[a-zA-Z](?!.*--)[a-zA-Z0-9-]{1,22}[a-zA-Z0-9]
 _KEY_VAULT_SECRET_NAME_RE = re.compile(r"^[a-zA-Z0-9-]{1,127}$")
 
 
+# Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftkeyvault
 class KeyVaultUri(str):
-    """Azure Key Vault URI.
-
-    Validates and parses a URI of the form:
-    https://{vault_name}.vault.azure.net/
-
-    Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftkeyvault
-    """
+    """Azure Key Vault URI (https://{vault_name}.vault.azure.net/)."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^https://([a-zA-Z][a-zA-Z0-9-]{1,22}[a-zA-Z0-9])\.vault\.azure\.net/?$"

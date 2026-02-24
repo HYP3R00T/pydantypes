@@ -12,11 +12,9 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html
 class Arn(str):
-    """An AWS ARN with parsed components.
-
-    Source: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html
-    """
+    """An AWS ARN with parsed components."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b|aws-iso-e|aws-iso-f)"
@@ -75,11 +73,9 @@ class Arn(str):
         }
 
 
+# Source: https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html
 class IamRoleArn(Arn):
-    """An IAM Role ARN with parsed role name.
-
-    Source: https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html
-    """
+    """An IAM Role ARN with parsed role name."""
 
     role_name: str
 
@@ -123,11 +119,9 @@ class IamRoleArn(Arn):
         }
 
 
+# Source: https://docs.aws.amazon.com/sns/latest/api/API_CreateTopic.html
 class SnsTopicArn(Arn):
-    """An SNS Topic ARN with parsed topic name.
-
-    Source: https://docs.aws.amazon.com/sns/latest/api/API_CreateTopic.html
-    """
+    """An SNS Topic ARN with parsed topic name."""
 
     topic_name: str
 

@@ -12,6 +12,7 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://github.com/distribution/reference/blob/main/reference.go
 class DockerImageRef(str):
     """A Docker/OCI image reference like registry/repo:tag@digest."""
 

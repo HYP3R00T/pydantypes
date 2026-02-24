@@ -26,6 +26,7 @@ def _validate_k8s_namespace_name(v: str) -> str:
     return v
 
 
+# Source: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
 K8sNamespaceName = Annotated[
     str,
     AfterValidator(_validate_k8s_namespace_name),
@@ -57,6 +58,7 @@ def _validate_k8s_resource_name(v: str) -> str:
     return v
 
 
+# Source: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-subdomain-names
 K8sResourceName = Annotated[
     str,
     AfterValidator(_validate_k8s_resource_name),
@@ -74,6 +76,7 @@ K8sResourceName = Annotated[
 ]
 
 
+# Source: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#syntax-and-character-set
 class K8sLabelKey(str):
     """A valid Kubernetes label key with optional prefix and name."""
 
@@ -134,6 +137,7 @@ def _validate_k8s_label_value(v: str) -> str:
     return v
 
 
+# Source: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#syntax-and-character-set
 K8sLabelValue = Annotated[
     str,
     AfterValidator(_validate_k8s_label_value),

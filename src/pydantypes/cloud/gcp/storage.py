@@ -49,7 +49,7 @@ def _validate_gcs_bucket_name(v: str) -> str:
     return v
 
 
-# Source: https://cloud.google.com/storage/docs/buckets
+# Source: https://cloud.google.com/storage/docs/naming-buckets
 GcsBucketName = Annotated[
     str,
     AfterValidator(_validate_gcs_bucket_name),
@@ -67,11 +67,9 @@ GcsBucketName = Annotated[
 ]
 
 
+# Source: https://cloud.google.com/storage/docs/request-endpoints
 class GcsUri(str):
-    """A validated Google Cloud Storage URI (gs://bucket/path).
-
-    Source: https://cloud.google.com/storage/docs/buckets
-    """
+    """A validated Google Cloud Storage URI (gs://bucket/path)."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^gs://([a-z0-9][a-z0-9._-]{1,61}[a-z0-9])(?:/(.*))?$"

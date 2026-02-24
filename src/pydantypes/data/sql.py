@@ -12,6 +12,7 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://www.iso.org/standard/76583.html
 class TableIdentifier(str):
     """A SQL table identifier like schema.table or catalog.schema.table."""
 

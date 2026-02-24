@@ -37,7 +37,7 @@ def _validate_subscription_id(v: str) -> str:
     return v.lower()
 
 
-# Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules
+# Source: https://learn.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id
 SubscriptionId = Annotated[
     str,
     AfterValidator(_validate_subscription_id),
@@ -64,7 +64,7 @@ def _validate_tenant_id(v: str) -> str:
     return v.lower()
 
 
-# Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules
+# Source: https://learn.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id
 TenantId = Annotated[
     str,
     AfterValidator(_validate_tenant_id),
@@ -107,11 +107,9 @@ ResourceGroupName = Annotated[
 ]
 
 
+# Source: https://learn.microsoft.com/en-us/azure/reliability/regions-list
 class Region(StrEnum):
-    """Azure region identifiers.
-
-    Source: https://learn.microsoft.com/en-us/azure/reliability/regions-list
-    """
+    """Azure region identifiers."""
 
     # US
     EASTUS = "eastus"

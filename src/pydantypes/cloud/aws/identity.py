@@ -84,11 +84,9 @@ CognitoUserPoolId = Annotated[
 ]
 
 
+# Source: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html
 class Region(StrEnum):
-    """AWS region identifiers.
-
-    Source: https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html
-    """
+    """AWS region identifiers."""
 
     US_EAST_1 = "us-east-1"
     US_EAST_2 = "us-east-2"

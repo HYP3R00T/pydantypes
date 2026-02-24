@@ -12,11 +12,9 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://cloud.google.com/pubsub/docs/pubsub-basics#resource_names
 class PubSubTopicName(str):
-    """A validated GCP Pub/Sub topic name (projects/{project}/topics/{topic}).
-
-    Source: https://cloud.google.com/pubsub/docs/pubsub-basics#resource_names
-    """
+    """A validated GCP Pub/Sub topic name (projects/{project}/topics/{topic})."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^projects/([a-z][a-z0-9-]{4,28}[a-z0-9]|\d+)/topics/([a-zA-Z][a-zA-Z0-9._~+%-]{2,254})$"
@@ -72,11 +70,9 @@ class PubSubTopicName(str):
         }
 
 
+# Source: https://cloud.google.com/pubsub/docs/pubsub-basics#resource_names
 class PubSubSubscriptionName(str):
-    """A validated GCP Pub/Sub subscription name.
-
-    Source: https://cloud.google.com/pubsub/docs/pubsub-basics#resource_names
-    """
+    """A validated GCP Pub/Sub subscription name."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^projects/([a-z][a-z0-9-]{4,28}[a-z0-9]|\d+)"

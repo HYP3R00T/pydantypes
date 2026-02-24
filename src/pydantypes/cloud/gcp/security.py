@@ -12,11 +12,9 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://cloud.google.com/secret-manager/docs/creating-and-accessing-secrets
 class SecretManagerSecretName(str):
-    """A validated GCP Secret Manager secret name (projects/{project}/secrets/{secret}).
-
-    Source: https://cloud.google.com/secret-manager/docs/creating-and-accessing-secrets
-    """
+    """A validated GCP Secret Manager secret name (projects/{project}/secrets/{secret})."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^projects/([a-z][a-z0-9-]{4,28}[a-z0-9]|\d+)/secrets/([a-zA-Z0-9_-]{1,255})$"
@@ -65,11 +63,9 @@ class SecretManagerSecretName(str):
         }
 
 
+# Source: https://cloud.google.com/secret-manager/docs/creating-and-accessing-secrets
 class SecretManagerVersionName(str):
-    """A validated GCP Secret Manager version name.
-
-    Source: https://cloud.google.com/secret-manager/docs/creating-and-accessing-secrets
-    """
+    """A validated GCP Secret Manager version name."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^projects/([a-z][a-z0-9-]{4,28}[a-z0-9]|\d+)"
@@ -122,11 +118,9 @@ class SecretManagerVersionName(str):
         }
 
 
+# Source: https://cloud.google.com/kms/docs/resource-hierarchy
 class KmsKeyName(str):
-    """A validated GCP KMS key name.
-
-    Source: https://cloud.google.com/kms/docs/resource-hierarchy
-    """
+    """A validated GCP KMS key name."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^projects/([a-z][a-z0-9-]{4,28}[a-z0-9]|\d+)"

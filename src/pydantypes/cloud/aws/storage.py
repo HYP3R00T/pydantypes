@@ -99,11 +99,9 @@ S3BucketName = Annotated[
 ]
 
 
+# Source: https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html
 class S3Uri(str):
-    """An S3 URI like s3://bucket/key with parsed properties.
-
-    Source: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
-    """
+    """An S3 URI like s3://bucket/key with parsed properties."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^s3://([a-z0-9][a-z0-9.\-]{1,61}[a-z0-9])(/(.*))?$"
@@ -155,7 +153,7 @@ class S3Uri(str):
         }
 
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 EbsVolumeId = Annotated[
     str,
     AfterValidator(_validate_ebs_volume_id),
@@ -170,7 +168,7 @@ EbsVolumeId = Annotated[
     ),
 ]
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 EbsSnapshotId = Annotated[
     str,
     AfterValidator(_validate_ebs_snapshot_id),

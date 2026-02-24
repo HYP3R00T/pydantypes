@@ -21,6 +21,7 @@ def _validate_helm_chart_name(v: str) -> str:
     return v
 
 
+# Source: https://helm.sh/docs/chart_best_practices/conventions/
 HelmChartName = Annotated[
     str,
     AfterValidator(_validate_helm_chart_name),

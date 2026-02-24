@@ -12,11 +12,9 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html
 class EcrRepositoryUri(str):
-    """An AWS ECR repository URI with parsed components.
-
-    Source: https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html
-    """
+    """An AWS ECR repository URI with parsed components."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^(\d{12})\.dkr\.ecr\.([a-z0-9-]+)\.amazonaws\.com/([a-z0-9][a-z0-9._/-]{0,255})$"

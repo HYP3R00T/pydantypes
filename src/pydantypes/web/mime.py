@@ -12,6 +12,7 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://datatracker.ietf.org/doc/html/rfc6838
 class MimeType(str):
     """A MIME type like application/json or text/html;charset=utf-8."""
 

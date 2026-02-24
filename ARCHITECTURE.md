@@ -11,11 +11,9 @@ Every type in pydantypes uses one of four patterns. The choice depends on what t
 Use when the validated string has **extractable components** (e.g., bucket + key from an S3 URI, partition + service + region from an ARN).
 
 ```python
+# Source: https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html
 class S3Uri(str):
-    """An S3 URI like s3://bucket/key with parsed properties.
-
-    Source: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
-    """
+    """An S3 URI like s3://bucket/key with parsed properties."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^s3://([a-z0-9][a-z0-9.\-]{1,61}[a-z0-9])(/(.*))?$"
@@ -68,7 +66,7 @@ Key rules:
 - `__get_pydantic_core_schema__` delegates to `_str_type_core_schema` from `_internal.py`
 - `__get_pydantic_json_schema__` returns a dict with `type`, `format`, `pattern`, `description`, `examples`, `title`
 - All five methods (`__new__`, `_validate`, `__get_pydantic_core_schema__`, `__get_pydantic_json_schema__`) have one-line docstrings
-- Class docstring includes a `Source:` URL on its own line
+- `# Source:` comment on the line directly above the class definition
 
 ### Pattern B: Annotated Type (Simple Validation)
 
@@ -108,7 +106,7 @@ Ec2InstanceId = Annotated[
 Key rules:
 - Regex lives at **module level** as `_UPPER_CASE_RE = re.compile(...)`
 - Validator function named `_validate_<type_name>` with a one-line docstring
-- Source URL as `# Source:` comment directly above the `Annotated[...]` assignment
+- `# Source:` comment directly above the `Annotated[...]` assignment
 - `WithJsonSchema` dict includes `type`, `pattern`, `description`, `examples`, `title`
 - Optional: `minLength`, `maxLength` when applicable
 
@@ -173,13 +171,28 @@ Module-level regexes use the naming convention `_UPPER_SNAKE_CASE_RE`.
 
 ## Source URL References
 
-Every type must reference its official documentation:
+Every type must have a `# Source:` comment on the line directly above its definition, linking to the official documentation. This applies uniformly to all patterns — no source URLs inside docstrings.
 
-| Pattern | Convention |
-|---------|------------|
-| **A** (str subclass) | `Source:` line in class docstring |
-| **B** (Annotated) | `# Source:` comment above the type alias |
-| **C** (StrEnum) | `Source:` line in class docstring |
+```python
+# Pattern A (str subclass):
+# Source: https://docs.aws.amazon.com/...
+class S3Uri(str):
+    """An S3 URI like s3://bucket/key with parsed properties."""
+
+# Pattern B (Annotated):
+# Source: https://docs.aws.amazon.com/...
+Ec2InstanceId = Annotated[...]
+
+# Pattern C (StrEnum):
+# Source: https://docs.aws.amazon.com/...
+class Region(StrEnum):
+    """AWS region identifiers."""
+```
+
+Rules:
+- URL must be verified to load and be the correct reference for the type
+- Prefer official provider docs (AWS, Azure, GCP), RFCs, or specification documents
+- Never put source URLs inside docstrings
 
 ## Docstrings
 

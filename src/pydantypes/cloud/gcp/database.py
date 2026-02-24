@@ -110,13 +110,9 @@ CloudSqlInstanceId = Annotated[
 ]
 
 
+# Source: https://cloud.google.com/bigquery/docs/tables
 class BigQueryTableId(str):
-    """A validated BigQuery fully-qualified table ID.
-
-    Supports both standard (project.dataset.table) and legacy (project:dataset.table) formats.
-
-    Source: https://cloud.google.com/bigquery/docs/tables
-    """
+    """A validated BigQuery fully-qualified table ID."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^([a-z][a-z0-9-]{4,28}[a-z0-9]|\d+)[.:]([a-zA-Z0-9_]{1,1024})\.([a-zA-Z0-9_]{1,1024})$"

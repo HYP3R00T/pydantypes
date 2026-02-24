@@ -12,11 +12,9 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html
 class SqsQueueUrl(str):
-    """An SQS Queue URL with parsed components.
-
-    Source: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html
-    """
+    """An SQS Queue URL with parsed components."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^https://sqs\.([a-z0-9-]+)\.amazonaws\.com/(\d{12})/([a-zA-Z0-9_-]+(\.fifo)?)$"

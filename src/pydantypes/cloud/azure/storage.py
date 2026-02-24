@@ -43,14 +43,9 @@ StorageAccountName = Annotated[
 ]
 
 
+# Source: https://learn.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
 class BlobStorageUri(str):
-    """Azure Blob Storage URI.
-
-    Validates and parses a URI of the form:
-    https://{account}.blob.core.windows.net/{container}[/{blob_path}]
-
-    Source: https://learn.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata
-    """
+    """Azure Blob Storage URI (https://{account}.blob.core.windows.net/{container}/{blob})."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^https://([a-z0-9]{3,24})\.blob\.core\.windows\.net"

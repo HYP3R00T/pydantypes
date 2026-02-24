@@ -43,6 +43,7 @@ def _validate_md5_hex(v: str) -> str:
     return v.lower()
 
 
+# Source: https://datatracker.ietf.org/doc/html/rfc6234
 Sha256Hex = Annotated[
     str,
     AfterValidator(_validate_sha256_hex),
@@ -60,6 +61,7 @@ Sha256Hex = Annotated[
     ),
 ]
 
+# Source: https://datatracker.ietf.org/doc/html/rfc3174
 Sha1Hex = Annotated[
     str,
     AfterValidator(_validate_sha1_hex),
@@ -77,6 +79,7 @@ Sha1Hex = Annotated[
     ),
 ]
 
+# Source: https://datatracker.ietf.org/doc/html/rfc1321
 Md5Hex = Annotated[
     str,
     AfterValidator(_validate_md5_hex),

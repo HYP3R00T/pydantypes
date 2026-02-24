@@ -34,7 +34,7 @@ def _validate_event_hub_namespace_name(v: str) -> str:
     return v
 
 
-# Source: https://learn.microsoft.com/en-us/rest/api/servicebus/create-namespace
+# Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftservicebus
 ServiceBusNamespace = Annotated[
     str,
     AfterValidator(_validate_service_bus_namespace),

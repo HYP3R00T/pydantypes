@@ -12,16 +12,9 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules
 class ResourceId(str):
-    """Azure Resource ID.
-
-    Validates and parses a fully-qualified Azure resource identifier of the form:
-    /subscriptions/{sub}/resourceGroups/{rg}/providers/{ns}/{type}/{name}
-
-    Supports nested resources (e.g., servers/myserver/databases/mydb).
-
-    Source: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules
-    """
+    """Azure Resource ID with support for nested resources."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^/subscriptions/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"

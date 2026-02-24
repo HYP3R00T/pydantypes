@@ -76,7 +76,7 @@ ComputeResourceName = Annotated[
     ),
 ]
 
-# Source: https://cloud.google.com/run/docs/reference/rest/v2/projects.locations.services
+# Source: https://cloud.google.com/functions/docs/reference/rest/v2/projects.locations.functions
 CloudFunctionName = Annotated[
     str,
     AfterValidator(_validate_cloud_function_name),

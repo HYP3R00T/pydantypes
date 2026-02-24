@@ -13,6 +13,7 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://datatracker.ietf.org/doc/html/rfc7519
 class Jwt(str):
     """A JSON Web Token (JWT) string with parsed header and payload."""
 

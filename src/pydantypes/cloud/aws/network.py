@@ -98,7 +98,7 @@ def _validate_route53_hosted_zone_id(v: str) -> str:
     return v
 
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 VpcId = Annotated[
     str,
     AfterValidator(_validate_vpc_id),
@@ -113,7 +113,7 @@ VpcId = Annotated[
     ),
 ]
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 SubnetId = Annotated[
     str,
     AfterValidator(_validate_subnet_id),
@@ -128,7 +128,7 @@ SubnetId = Annotated[
     ),
 ]
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 SecurityGroupId = Annotated[
     str,
     AfterValidator(_validate_security_group_id),
@@ -143,7 +143,7 @@ SecurityGroupId = Annotated[
     ),
 ]
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 NatGatewayId = Annotated[
     str,
     AfterValidator(_validate_nat_gateway_id),
@@ -158,7 +158,7 @@ NatGatewayId = Annotated[
     ),
 ]
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 InternetGatewayId = Annotated[
     str,
     AfterValidator(_validate_internet_gateway_id),
@@ -173,7 +173,7 @@ InternetGatewayId = Annotated[
     ),
 ]
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 ElasticIpAllocationId = Annotated[
     str,
     AfterValidator(_validate_elastic_ip_allocation_id),
@@ -188,7 +188,7 @@ ElasticIpAllocationId = Annotated[
     ),
 ]
 
-# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resources.html
+# Source: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html
 EniId = Annotated[
     str,
     AfterValidator(_validate_eni_id),

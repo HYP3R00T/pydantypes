@@ -12,11 +12,9 @@ from pydantic_core import CoreSchema, PydanticCustomError
 from pydantypes._internal import _str_type_core_schema
 
 
+# Source: https://cloud.google.com/artifact-registry/docs/docker/pushing-and-pulling
 class ArtifactRegistryImageUri(str):
-    """A validated GCP Artifact Registry image URI.
-
-    Source: https://cloud.google.com/artifact-registry/docs/docker/pushing-and-pulling
-    """
+    """A validated GCP Artifact Registry image URI."""
 
     _pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"^([a-z][a-z0-9-]*)-docker\.pkg\.dev"
