@@ -4,6 +4,7 @@
 [![license](https://img.shields.io/github/license/oborchers/pydantypes.svg)](https://github.com/oborchers/pydantypes/blob/main/LICENSE)
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://docs.pydantic.dev)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+![types](https://img.shields.io/badge/types-100%2B-blue)
 
 **The missing types for Pydantic** — cloud, DevOps, web, data, and AI engineering.
 
