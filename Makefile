@@ -46,7 +46,7 @@ test-cov: ## Run tests with coverage
 	$(UV) run pytest tests -v --cov=$(PACKAGE) --cov-report=term-missing --cov-report=html
 
 ##@ Combined
-check: lint typecheck test ## Run all checks: lint + typecheck + test
+check: format-check lint typecheck test ## Run all checks: format + lint + typecheck + test
 
 ##@ Build
 build: clean ## Build package

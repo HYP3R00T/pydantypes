@@ -6,7 +6,7 @@ import sys
 from typing import Any
 
 if sys.version_info >= (3, 11):
-    from enum import StrEnum as StrEnum
+    from enum import StrEnum as StrEnum  # noqa: PLC0414 — intentional re-export
 else:
     from enum import Enum
 

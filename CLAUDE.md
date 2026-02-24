@@ -27,7 +27,7 @@ make check       # Run all: lint + typecheck + tests
 
 ### Pre-commit Hooks
 
-**Auto** (every commit): format, lint (staged Python only) | **Manual**: typecheck, test
+**Auto** (every commit): ruff lint with `--fix`, ruff format, file hygiene (trailing whitespace, end-of-file, yaml/toml check, large files, merge conflicts, debug statements). Typecheck and tests run in CI only — too slow for pre-commit. Run `make check` locally before pushing.
 
 ## Critical Rules
 
@@ -64,6 +64,10 @@ Every type definition must have a `# Source: <url>` comment on the line directly
 ### Never Reference Removed Code in Comments
 
 Comments describe what code DOES, not what it USED TO DO. Git tracks history.
+
+### Makefile Is the Single Source of Truth
+
+All commands — CI, pre-commit, developer workflow — use `make` targets. Never run raw tool commands in CI or docs; always wrap them in a Makefile target. `make check` runs the full quality gate (format-check + lint + typecheck + test).
 
 ### Check Before Creating Files
 
