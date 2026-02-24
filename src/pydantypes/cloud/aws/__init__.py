@@ -10,7 +10,8 @@ from pydantypes.cloud.aws.compute import (
 )
 from pydantypes.cloud.aws.containers import EcrRepositoryUri
 from pydantypes.cloud.aws.database import DynamoDbTableName, RdsInstanceId
-from pydantypes.cloud.aws.identity import AccountId, CognitoUserPoolId, Region
+from pydantypes.cloud.aws.identity import AccountId, CognitoUserPoolId
+from pydantypes.cloud.aws.region import Region
 from pydantypes.cloud.aws.messaging import SqsQueueUrl
 from pydantypes.cloud.aws.monitoring import CloudWatchLogGroupName
 from pydantypes.cloud.aws.network import (

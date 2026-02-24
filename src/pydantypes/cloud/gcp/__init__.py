@@ -14,10 +14,9 @@ from pydantypes.cloud.gcp.identity import (
     OrganizationId,
     ProjectId,
     ProjectNumber,
-    Region,
     ServiceAccountEmail,
-    Zone,
 )
+from pydantypes.cloud.gcp.region import Region, Zone
 from pydantypes.cloud.gcp.messaging import PubSubSubscriptionName, PubSubTopicName
 from pydantypes.cloud.gcp.security import (
     KmsKeyName,

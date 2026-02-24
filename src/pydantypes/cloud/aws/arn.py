@@ -21,7 +21,7 @@ class Arn(str):
         r":([a-z0-9-]+):([a-z0-9-]*):(\d{12}|):(.+)$"
     )
 
-    partition: str  # type: ignore[assignment]
+    aws_partition: str
     service: str
     region: str
     account_id: str
@@ -37,7 +37,7 @@ class Arn(str):
                 {"value": value},
             )
         instance = str.__new__(cls, value)
-        instance.partition = m.group(1)
+        instance.aws_partition = m.group(1)
         instance.service = m.group(2)
         instance.region = m.group(3)
         instance.account_id = m.group(4)

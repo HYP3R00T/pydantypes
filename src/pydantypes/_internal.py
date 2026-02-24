@@ -2,7 +2,16 @@
 
 from __future__ import annotations
 
+import sys
 from typing import Any
+
+if sys.version_info >= (3, 11):
+    from enum import StrEnum as StrEnum
+else:
+    from enum import Enum
+
+    class StrEnum(str, Enum):
+        """String enum backcompat shim for Python 3.10."""
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema

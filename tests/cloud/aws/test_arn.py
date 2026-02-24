@@ -83,7 +83,7 @@ def test_valid_arn(
 ) -> None:
     model = ArnModel(arn=value)
     assert str(model.arn) == value
-    assert model.arn.partition == partition
+    assert model.arn.aws_partition == partition
     assert model.arn.service == service
     assert model.arn.region == region
     assert model.arn.account_id == account_id

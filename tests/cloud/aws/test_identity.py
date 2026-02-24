@@ -5,15 +5,11 @@ from __future__ import annotations
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from pydantypes.cloud.aws.identity import AccountId, CognitoUserPoolId, Region
+from pydantypes.cloud.aws.identity import AccountId, CognitoUserPoolId
 
 
 class AccountIdModel(BaseModel):
     account_id: AccountId
-
-
-class RegionModel(BaseModel):
-    region: Region
 
 
 class CognitoModel(BaseModel):
@@ -48,28 +44,6 @@ def test_account_id_json_schema() -> None:
     field_schema = schema["properties"]["account_id"]
     assert field_schema["type"] == "string"
     assert "pattern" in field_schema
-
-
-@pytest.mark.parametrize(
-    "value", ["us-east-1", "eu-west-1", "ap-southeast-1", "ap-southeast-5", "mx-central-1"]
-)
-def test_valid_region(value: str) -> None:
-    model = RegionModel(region=value)
-    assert model.region == value
-
-
-@pytest.mark.parametrize("value", ["invalid-region", "US-EAST-1", ""])
-def test_invalid_region(value: str) -> None:
-    with pytest.raises(ValidationError):
-        RegionModel(region=value)
-
-
-def test_region_serialization() -> None:
-    model = RegionModel(region="us-east-1")
-    assert model.model_dump() == {"region": "us-east-1"}
-    json_str = model.model_dump_json()
-    restored = RegionModel.model_validate_json(json_str)
-    assert restored.region == model.region
 
 
 @pytest.mark.parametrize("value", ["us-east-1_AbCdEfGhI", "eu-west-1_abc123"])

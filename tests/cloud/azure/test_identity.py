@@ -6,7 +6,6 @@ import pytest
 from pydantic import BaseModel, ValidationError
 
 from pydantypes.cloud.azure.identity import (
-    Region,
     ResourceGroupName,
     SubscriptionId,
     TenantId,
@@ -23,10 +22,6 @@ class TenantIdModel(BaseModel):
 
 class ResourceGroupNameModel(BaseModel):
     field: ResourceGroupName
-
-
-class RegionModel(BaseModel):
-    field: Region
 
 
 # --- SubscriptionId tests ---
@@ -109,26 +104,3 @@ def test_invalid_resource_group_name(value: str) -> None:
 def test_resource_group_name_serialization() -> None:
     m = ResourceGroupNameModel(field="my-rg")
     assert m.model_dump()["field"] == "my-rg"
-
-
-# --- Region tests ---
-
-
-def test_valid_region() -> None:
-    m = RegionModel(field="eastus")
-    assert m.field == Region.EASTUS
-
-
-def test_invalid_region() -> None:
-    with pytest.raises(ValidationError):
-        RegionModel(field="invalid-region")
-
-
-def test_region_enum_values() -> None:
-    assert Region.WESTEUROPE == "westeurope"
-    assert Region.JAPANEAST == "japaneast"
-
-
-def test_new_regions() -> None:
-    assert Region.NEWZEALANDNORTH == "newzealandnorth"
-    assert Region.TAIWANNORTH == "taiwannorth"
