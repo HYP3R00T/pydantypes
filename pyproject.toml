@@ -7,7 +7,7 @@ name = "pydantypes"
 dynamic = ["version"]
 description = "The missing types for Pydantic — cloud, DevOps, web, and data engineering."
 readme = "README.md"
-license = "MIT"
+license-expression = "MIT"
 requires-python = ">=3.10"
 authors = [{ name = "Oliver Borchers" }]
 keywords = ["pydantic", "types", "validation", "aws", "azure", "gcp", "cloud", "devops", "type-safety"]
@@ -104,7 +104,7 @@ plugins = ["pydantic.mypy"]
 testpaths = ["tests"]
 python_files = "test_*.py"
 python_functions = "test_*"
-addopts = "-v --strict-markers --strict-config"
+addopts = "-v --strict-markers --strict-config --tb=short"
 filterwarnings = ["error"]
 
 # --- Coverage ---

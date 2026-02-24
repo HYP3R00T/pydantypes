@@ -1,3 +1,5 @@
+"""Validated types for Kubernetes resource names and namespaces."""
+
 from __future__ import annotations
 
 import re

@@ -46,7 +46,7 @@ pip install pydantypes
 
 ### Always Analyze Codebase Before Making Changes
 
-Check existing patterns first, never invent new ones:
+Check existing patterns first, never invent new ones. See [ARCHITECTURE.md](ARCHITECTURE.md) for the canonical reference on type patterns (A/B/C/D), regex placement, docstring conventions, error handling, JSON schema, and test structure.
 
 ```bash
 tree src/pydantypes/

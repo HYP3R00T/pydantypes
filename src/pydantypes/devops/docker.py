@@ -1,3 +1,5 @@
+"""Validated types for Docker image references."""
+
 from __future__ import annotations
 
 import re

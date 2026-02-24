@@ -13,6 +13,8 @@ pydantypes provides validated, constrained Pydantic types for identifiers, ARNs,
 
 ```bash
 pip install pydantypes
+# or
+uv add pydantypes
 ```
 
 ## Quick Example
@@ -67,6 +69,10 @@ pydantypes is designed as a complement to [pydantic-extra-types](https://github.
 
 - Requires **Pydantic v2.5.2+**
 - Supports **Python 3.10–3.13**
+
+## Architecture
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for type patterns, conventions, and design decisions.
 
 ## Development
 
